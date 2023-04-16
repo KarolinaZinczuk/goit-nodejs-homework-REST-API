@@ -9,7 +9,7 @@ const {
 } = require("../../controllers/contacts");
 
 const { contactSchema } = require("../../models/contact");
-const { createError } = require("../../helpers/createError");
+const  createError  = require("../../helpers/createError");
 
 const router = express.Router()
 
@@ -38,7 +38,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const { error } = addSchema.validate(req.body);
+    const { error } = contactSchema.validate(req.body);
     if (error) {
       throw createError(400, (error.message = 'missing required name field'));
     }
