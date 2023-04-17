@@ -6,6 +6,7 @@ const {
   getContactById,
   removeContact,
   updateContact,
+  updateStatus,
 } = require("../../controllers/contacts");
 
 const { contactSchema } = require("../../models/contact");
@@ -13,72 +14,84 @@ const  createError  = require("../../helpers/createError");
 
 const router = express.Router()
 
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
   try {
     const result = await listContacts();
     res.json(result);
-  } catch (error) {
-    next(error);
+  } catch {
+    return res.status(500).send("Something went wrong");
   };
 })
 
-router.get('/:contactId', async (req, res, next) => {
+router.get('/:id', async (req, res) => {
   try {
-    const { contactId } = req.params;
-    const result = await getContactById(contactId);
+    const { id } = req.params;
+    const result = await getContactById(id);
 
     if (!result) {
       throw createError(404);
     }
     res.json(result);
-  } catch (error) {
-    next(error);
-  }
+  } catch {
+    return res.status(500).send("Something went wrong");
+  };
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', async (req, res) => {
   try {
-    const { error } = contactSchema.validate(req.body);
-    if (error) {
-      throw createError(400, (error.message = 'missing required name field'));
-    }
-    const result = await addContact(req.body);
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
-  }
+    const { name, email, phone } = req.body;
+    const newContact = await addContact(name, email, phone);
+    console.log("new contact", newContact);
+    return res.json(newContact);
+  } catch {
+    return res.status(500).send("Something went wrong");
+  };
 });
 
-router.delete('/:contactId', async (req, res, next) => {
+router.delete('/:id', async (req, res) => {
   try {
-    const { contactId } = req.params;
-    const result = await removeContact(contactId);
+    const { id } = req.params;
+    const result = await removeContact(id);
     if (!result) {
       throw createError(404);
     }
     res.json({
       message: "contact delated",
     });
-  } catch (error) {
-    next(error);
-  }
+  } catch {
+   return res.status(500).send("Something went wrong");
+  };
 });
 
-router.put('/:contactId', async (req, res, next) => {
-  try {
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
     const { error } = contactSchema.validate(req.body);
     if (error) {
       throw createError(400, (error.message = "missing fields"));
     }
-    const { contactId } = req.params;
-    const result = await updateContact(contactId, req.body);
+    try {
+    const result = await updateContact(id, req.body);
     if (!result) {
       throw createError(404);
     }
     res.json(result);
-  } catch (error) {
-    next(error);
-  }
-})
+  } catch {
+return res.status(500).send("Something went wrong");  };
+});
+
+router.patch("/:id/favorite", async (req, res) => {
+  const { id } = req.params;
+  const { favorite } = req.body;
+  try {
+    const getContactById = await getContactById(id);
+    if (!getContactById) {
+      throw createError(404);
+    }
+    const result = await updateStatus(id, favorite);
+    res.json(result);
+  } catch {
+    return res.status(500).send("Something went wrong");
+  };
+});
 
 module.exports = router;
