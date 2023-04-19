@@ -36,7 +36,7 @@ const addContact = async (body) => {
   const contacts = await listContacts();
   const contactId = Number(contacts.slice(-1)[0].id)+1;
   const newContact = {
-    id: contactId,
+    id: `${ contactId }`,
     ...body,
   };
   contacts.push(newContact);
