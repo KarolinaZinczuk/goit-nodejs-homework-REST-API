@@ -7,9 +7,6 @@ const listContacts = async () => {
 
 const getContactById = async (_id) => {
   const contact = await Contact.findOne({_id});
-  if (!contact) {
-    return null
-  }
   return contact;
 };
 
@@ -54,7 +51,7 @@ const updateStatus = async (_id, updateData) => {
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 module.exports = {
   listContacts,
