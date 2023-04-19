@@ -1,4 +1,5 @@
 const { Contact } = require("../models/contact");
+const { hashPassword } = require("../models/user");
 
 const listContacts = async () => {
   const contacts = await Contact.find();
@@ -15,15 +16,17 @@ const removeContact = async (_id) => {
     return Contact.findByIdAndDelete({ _id });
   } catch (error) {
     console.log(error);
-}
+  }
 };
 
 const addContact = async (body) => {
+  const hashedPassword = hashPassword(password);
   try {
     const newContact = new Contact({
       name: body.name,
       email: body.mail,
       phone: body.phone,
+      password: hashedPassword,
     });
     await newContact.save();
     return newContact;
