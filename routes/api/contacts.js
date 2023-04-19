@@ -27,7 +27,7 @@ router.get('/:contactId', async (req, res, next) => {
     const result = await getContactById(contactId);
 
     if (!result) {
-      return res.status(404).json({ message: '' });
+      return res.status(404).json({ message: 'Contact not found' });
     }
     res.json(result);
   } catch (error) {
@@ -39,7 +39,7 @@ router.post('/', async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: 'missing required name field' });
+      return res.status(400).json({ message: 'Missing required name field' });
     }
     const result = await addContact(req.body);
     return res.status(201).json(result);
@@ -53,9 +53,9 @@ router.delete('/:contactId', async (req, res, next) => {
     const { contactId } = req.params;
     const result = await removeContact(contactId);
     if (!result) {
-      return res.status(404).json({ message: '' });
+      return res.status(404).json({ message: 'Contact not found' });
     }
-    return res.json({ message: "contact delated" });
+    return res.json({ message: "Contact delated" });
   } catch (error) {
     next(error);
   }
@@ -65,12 +65,12 @@ router.put('/:contactId', async (req, res, next) => {
   try {
     const { error } = contactSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: 'missing required name field' });
+      return res.status(400).json({ message: 'Missing required name field' });
     }
     const { contactId } = req.params;
     const result = await updateContact(contactId, req.body);
     if (!result) {
-      return res.status(404).json({ message: '' });
+      return res.status(404).json({ message: 'Contact not found' });
     }
     res.json(result);
   } catch (error) {
