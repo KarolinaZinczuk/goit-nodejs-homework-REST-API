@@ -18,13 +18,9 @@ const removeContact = async (_id) => {
 }
 };
 
-const addContact = async (body) => {
+const addContact = async (name, email, phone) => {
   try {
-    const newContact = new Contact({
-      name: body.name,
-      email: body.mail,
-      phone: body.phone,
-    });
+    const newContact = new Contact({ name, email, phone });
     await newContact.save();
     return newContact;
   } catch (error) {
