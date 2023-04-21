@@ -1,12 +1,10 @@
-const { token } = require("morgan");
-const { User } = require("../models/user");
-const { hashPassword } = require("../models/user");
+const { User, hashPassword } = require("../models/user");
 
 const createUser = async (email, password) => {
     const hashedPassword = hashPassword(password);
     try {
         const newUser = new User({
-            email: body.email,
+            email,
             password: hashedPassword,
         });
         await newUser.save();
@@ -16,35 +14,20 @@ const createUser = async (email, password) => {
     }
 };
 
+const getUserByemail = async (email) => {
+    const user = await User.findOne({ email });
+    return user;
+};
+
 const getUserByToken = async (token) => {
     const user = await User.findOne({ token });
     return user;
 };
 
-const logout = async (token) => {
-    try {
-        const user = await User.findByIdAndUpdate(
-            { _id: token._id },
-            { $set: { tokens: [] } },
-            { new: true }
-        );
-        return user;
-    } catch (error) {
-        console.log(error);
-    }
+const logout = async (req, res) => {
+    const { _id } = req.user;
+    await User.findByIdAndUpdate(_id, { token: "" });
+    res.status(204).send();
 };
 
-const currentUser = async (req, res) => {
-    try {
-        const { token } = req.user;
-        const user = await User.getUserByToken({ token });
-        if (!user) {
-            res.status(401).send("not authorized");
-        }
-        return res.json({ token });
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-module.exports = { createUser, getUserByToken, logout, currentUser };
+module.exports = { createUser, getUserByemail, getUserByToken, logout };

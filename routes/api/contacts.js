@@ -11,7 +11,7 @@ const {
 
 const { contactSchema } = require("../../models/contact");
 
-const router = express.Router()
+const router = express.Router();
 
 router.get('/', async (req, res) => {
   try {
