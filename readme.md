@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-
 ## GoIT Node.js Course Template Homework
-
-<<<<<<< HEAD
 
 Виконайте форк цього репозиторію для виконання домашніх завдань (2-6)
 Форк створить репозиторій на вашому http://github.com
@@ -34,6 +30,4 @@ Fork this repository for homework (2-6) The fork will create a repository on you
 - `npm start` &mdash; старт сервера в режимі production
 - `npm run start:dev` &mdash; старт сервера в режимі розробки (development)
 - `npm run lint` &mdash; запустити виконання перевірки коду з eslint, необхідно виконувати перед кожним PR та виправляти всі помилки лінтера
-- # `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
-
-> > > > > > > 184625ed94f6ffb96bc80bd80d44f99fe7d8785a
+- `npm lint:fix` &mdash; та ж перевірка лінтера, але з автоматичними виправленнями простих помилок
