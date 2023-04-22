@@ -1,5 +1,4 @@
 ## GoIT Node.js Course Template Homework
-
 Fork this repository for homework (2-6) The fork will create a repository on your http://github.com
 
 Add a mentor to a collaboration.
