@@ -75,10 +75,6 @@ router.get("/current", auth, async (req, res) => {
     }
 });
 
-
-
-
-
 const uploadTmpDir = path.join(process.cwd(), "tmp");
 const avatarsDir = path.join(process.cwd(), "/public/avatars");
 
@@ -126,9 +122,5 @@ router.patch("/avatars", auth, upload.single("avatar"), async (req, res, next) =
     }
 }
 );
-
-
-
-
 
 module.exports = router;
