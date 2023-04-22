@@ -30,7 +30,12 @@ const getUserByToken = async (token) => {
 const logout = async (req, res) => {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: "" });
-    res.status(204).send();
+    return res.status(204).send();
 };
 
-module.exports = { createUser, getUserByemail, getUserByToken, logout };
+const verifyUser = async (verifyToken) => {
+    const user = await User.findOne({ verifyToken });
+    return user;
+};
+
+module.exports = { createUser, getUserByemail, getUserByToken, logout, verifyUser };

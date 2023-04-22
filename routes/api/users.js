@@ -7,8 +7,9 @@ const jimp = require("jimp");
 
 const loginHandler = require("../../auth//loginHandler");
 const auth = require("../../auth/auth");
+const { sendEmail } = require("../../helpers/sendEmail");
 
-const { createUser, getUserByToken, logout} = require("../../controllers/users.js");
+const { createUser, getUserByToken, logout, verifyUser} = require("../../controllers/users.js");
 const { User, userValidationSchema } = require("../../models/user");
 
 const jwt = require("jsonwebtoken");
@@ -114,9 +115,45 @@ router.patch("/avatars", auth, upload.single("avatar"), async (req, res, next) =
         });
     } catch (error) {
         await fs.unlink(tmpPath);
-        throw error;
+        return res.status(500).send({ message: "Server error" });
     }
-}
-);
+});
+
+router.get("/verify/:verificationToken", async (req, res) => {
+    try {
+        const { verificationToken } = req.params;
+        const user = await verifyUser(verificationToken);
+
+        if (user) {
+            return res.send({ message: "Verification succesfull" });
+        } else {
+            return res.status(404).send({ message: "User not found" });
+        }
+    } catch (error) {
+        return res.status(500).send({ message: "Server error" });
+    }
+});
+
+router.post("/verify", async (req, res) => {
+    const { email } = req.body;
+    const { error } = userValidationSchema.validate({ email });
+    if (error) {
+        return res.status(400).json({ message: "Bad Request" });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+        return res.status(401).json({ message: "Not authorized" });
+    }
+    if (user.verify) {
+        return res.status(400).json({ message: "Verification has already been passed" });
+    }
+    const data = {
+        to: email,
+        subject: "Verification email",
+        html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${user.verificationToken}">Click to confirm registration</a>`,
+    };
+    await sendEmail(data);
+    return res.json({ message: "Verification email sent" });
+});
 
 module.exports = router;
