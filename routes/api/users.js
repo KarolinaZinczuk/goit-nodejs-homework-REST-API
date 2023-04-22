@@ -93,32 +93,28 @@ const storage = multer.diskStorage({
 const upload = multer({storage});
 
 router.patch("/avatars", auth, upload.single("avatar"), async (req, res, next) => {
-    const { path: temporaryName, originalname: originalName } = req.file;
-
-    const image = await jimp.read(temporaryName);
-    await image.resize(250, 250);
-    await image.writeAsync(temporaryName);
 
     const { _id } = req.user;
+    const { path: tmpPath, originalname: originalName } = req.file;
+
+    const img = await jimp.read(tmpPath);
+    await img.resize(250, 250);
+    await img.writeAsync(tmpPath);
 
     const userId = req.user.id;
-    const newName = userId + "-" + originalName;
-    const avatarFilePath = path.join(avatarsDir, newName);
+    const newName = userId + " " + originalName;
+    const uploadPath = path.join(avatarsDir, newName);
 
     try {
-        await fs.rename(temporaryName, avatarFilePath);
-
-        const newData = { avatarURL: avatarFilePath };
-        await updateUser(_id, newData);
-
-        const user = await getUserById(req.user.id);
-        return res.status(200).json({
-            message: "File uploaded successfully", data: { avatarURL: user.avatarURL },
+        await fs.rename(tmpPath, uploadPath);
+        const avatarURL = path.join("avatars", newName);
+        await User.findByIdAndUpdate(_id, { avatarURL });
+        return res.json({
+            avatarURL,
         });
     } catch (error) {
-        console.log(error.message);
-        await fs.unlink(temporaryName);
-        return res.status(401).json({ message: "Not authorized" })
+        await fs.unlink(tmpPath);
+        throw error;
     }
 }
 );
