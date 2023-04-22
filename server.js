@@ -1,6 +1,13 @@
 const app = require('./app')
 const fs = require("fs").promises;
 
+const path = require("path");
+const uploadDir = path.join(process.cwd(), "tmp");
+const storeImage = path.join(process.cwd(), "/public/avatars");
+
+const { connectDatabase } = require("./startup/database.js");
+connectDatabase();
+
 const isExist = (path) => {
   return fs
     .access(path)
@@ -9,7 +16,6 @@ const isExist = (path) => {
 };
 
 const createFolderIfNotExist = async (path) => {
-  // jeeli nasz folder nie istnieje to go utworzymy
   if (!(await isExist(path))) {
     await fs.mkdir(path);
   }
@@ -18,6 +24,8 @@ const createFolderIfNotExist = async (path) => {
 const port = 3000;
 
 app.listen(port, () => {
+  createFolderIfNotExist(uploadDir);
+  createFolderIfNotExist(storeImage);
   console.log(`Server running. Use our API on port: ${port}`);
 });
 
