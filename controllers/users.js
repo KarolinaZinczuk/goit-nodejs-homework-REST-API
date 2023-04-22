@@ -1,11 +1,14 @@
 const { User, hashPassword } = require("../models/user");
+const gravatar = require("gravatar");
 
 const createUser = async (email, password) => {
     const hashedPassword = hashPassword(password);
+    const gravatarUrl = gravatar.url(email);
     try {
         const newUser = new User({
             email,
             password: hashedPassword,
+            avatarURL: gravatarUrl,
         });
         await newUser.save();
         return newUser;
