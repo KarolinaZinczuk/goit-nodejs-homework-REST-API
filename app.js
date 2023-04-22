@@ -9,7 +9,8 @@ const cors = require('cors');
 const { connectDatabase } = require("./startup/datebase");
 connectDatabase();
 
-const contactsRouter = require('./routes/api/contacts')
+const contactsRouter = require('./routes/api/contacts');
+const usersRouter = require("./routes/api/users");
 
 const app = express()
 
