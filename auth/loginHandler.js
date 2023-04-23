@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 
-const getUserByemail = require("../controllers/users");
+const { getUserByemail } = require("../controllers/users");
 const issueToken = require("./issueToken");
 
 const loginHandler = async (email, incomingPassword) => {
