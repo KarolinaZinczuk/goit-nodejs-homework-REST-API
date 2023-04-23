@@ -5,9 +5,6 @@ const path = require("path");
 const uploadDir = path.join(process.cwd(), "tmp");
 const storeImage = path.join(process.cwd(), "/public/avatars");
 
-const { connectDatabase } = require("./startup/database");
-connectDatabase();
-
 const isExist = (path) => {
   return fs
     .access(path)
