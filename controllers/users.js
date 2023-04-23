@@ -17,6 +17,11 @@ const createUser = async (email, password) => {
     }
 };
 
+const getUserById = async (id) => {
+    const user = await User.findOne({ id });
+    return user;
+};
+
 const getUserByemail = async (email) => {
     const user = await User.findOne({ email });
     return user;
@@ -38,4 +43,4 @@ const verifyUser = async (verifyToken) => {
     return user;
 };
 
-module.exports = { createUser, getUserByemail, getUserByToken, logout, verifyUser };
+module.exports = { createUser, getUserById, getUserByemail, getUserByToken, logout, verifyUser };
