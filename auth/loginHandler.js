@@ -6,7 +6,7 @@ const issueToken = require("./issueToken");
 const loginHandler = async (email, incomingPassword) => {
     const user = await getUserByemail(email);
     if (!user) {
-        throw { code: 404, msg: "User not found!!!" };
+        return res.status(404).send({ message: "User not found!" });
     }
     const userPassword = user.password;
 
