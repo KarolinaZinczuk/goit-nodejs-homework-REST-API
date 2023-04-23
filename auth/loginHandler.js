@@ -15,7 +15,7 @@ const loginHandler = async (email, incomingPassword) => {
     if (result) {
         return issueToken(user);
     } else {
-        throw { code: 401, msg: "Invalid credentials" };
+        return res.status(401).send({ message: "Invalid credentials" });
     }
 };
 
