@@ -19,13 +19,13 @@ const removeContact = async (_id) => {
   }
 };
 
-const addContact = async (body) => {
+const addContact = async (name, email, phone, password) => {
   const hashedPassword = hashPassword(password);
   try {
     const newContact = new Contact({
-      name: body.name,
-      email: body.mail,
-      phone: body.phone,
+      name,
+      email,
+      phone,
       password: hashedPassword,
     });
     await newContact.save();
