@@ -9,7 +9,7 @@ const loginHandler = require("../../auth//loginHandler");
 const auth = require("../../auth/auth");
 
 const { createUser, getUserByToken, logout} = require("../../controllers/users.js");
-const { User, userValidationSchema } = require("../../models/user");
+const { User, userSchema } = require("../../models/user");
 
 const jwt = require("jsonwebtoken");
 const jwtSecret = process.env.JWT_SECRET;
@@ -17,7 +17,7 @@ const jwtSecret = process.env.JWT_SECRET;
 const router = express.Router();
 
 router.post("/signup", async (req, res, next) => {
-    const { error } = userValidationSchema.validate(req.body);
+    const { error } = userSchema.validate(req.body);
     
     if (error) {
         return res.status(400).json({ message: "Bad Request" });
