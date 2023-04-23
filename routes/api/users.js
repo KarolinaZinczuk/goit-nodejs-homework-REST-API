@@ -4,7 +4,6 @@ const path = require("path");
 const fs = require("fs").promises;
 const multer = require("multer");
 const jimp = require("jimp");
-const { v4 } = require("uuid");
 
 const loginHandler = require("../../auth//loginHandler");
 const auth = require("../../auth/auth");
@@ -32,7 +31,6 @@ router.post("/signup", async (req, res, next) => {
     }
 
     try {
-        const verificationToken = v4();
         const user = await createUser(email, password, verificationToken);
         const data = {
             to: email,
