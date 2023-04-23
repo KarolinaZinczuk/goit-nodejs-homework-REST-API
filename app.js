@@ -10,6 +10,7 @@ const { connectDatabase } = require("./startup/database");
 connectDatabase();
 
 const contactsRouter = require('./routes/api/contacts');
+
 const usersRouter = require("./routes/api/users");
 
 const app = express()
