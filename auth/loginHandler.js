@@ -6,7 +6,7 @@ const issueToken = require("./issueToken");
 const loginHandler = async (email, incomingPassword) => {
     const user = await getUserByemail(email);
     if (!user) {
-        throw { code: 404, msg: "User not found!!!" };
+        return res.status(404).send({ message: "User not found!" });
     }
     const userPassword = user.password;
 
@@ -15,7 +15,7 @@ const loginHandler = async (email, incomingPassword) => {
     if (result) {
         return issueToken(user);
     } else {
-        throw { code: 401, msg: "Invalid credentials" };
+        return res.status(401).send({ message: "Invalid credentials" });
     }
 };
 
