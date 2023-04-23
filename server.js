@@ -1,8 +1,5 @@
 const app = require('./app');
 
-const { connectDatabase } = require("./startup/database.js");
-connectDatabase();
-
 const port = 3000;
 
 app.listen(port, () => {
