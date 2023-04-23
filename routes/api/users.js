@@ -31,7 +31,7 @@ router.post("/signup", async (req, res, next) => {
     }
 
     try {
-        const user = await createUser(email, password, verificationToken);
+        const user = await createUser(email, password);
         const data = {
             to: email,
             subject: "Verification email",
