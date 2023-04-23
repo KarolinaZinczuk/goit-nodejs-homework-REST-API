@@ -14,6 +14,12 @@ const createUser = async (email, password) => {
     }
 };
 
+const getUserById = async (id) => {
+    const user = await User.findOne({ id });
+    return user;
+};
+
+
 const getUserByemail = async (email) => {
     const user = await User.findOne({ email });
     return user;
@@ -30,4 +36,4 @@ const logout = async (req, res) => {
     res.status(204).send();
 };
 
-module.exports = { createUser, getUserByemail, getUserByToken, logout };
+module.exports = { createUser, getUserById, getUserByemail, getUserByToken, logout };
