@@ -43,8 +43,8 @@ const updateToken = async (_id, token) => {
     return user;
 }
 
-const verifyUser = async (verifyToken) => {
-    const user = await User.findOne({ verifyToken });
+const verifyUser = async (verificationToken) => {
+    const user = await User.findOne({ verificationToken });
     return user;
 };
 
