@@ -2,16 +2,14 @@ const { User, hashPassword } = require("../models/user");
 const gravatar = require("gravatar");
 const { v4 } = require("uuid");
 
-const createUser = async (email, password, verificationToken) => {
+const createUser = async (email, password) => {
     const hashedPassword = hashPassword(password);
     const gravatarUrl = gravatar.url(email);
-    const verificationToken = v4();
     try {
         const newUser = new User({
             email,
             password: hashedPassword,
             avatarURL: gravatarUrl,
-            verificationToken,
         });
         await newUser.save();
         return newUser;
