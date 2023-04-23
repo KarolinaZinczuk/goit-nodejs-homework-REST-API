@@ -38,9 +38,14 @@ const logout = async (req, res) => {
     return res.status(204).send();
 };
 
+const updateToken = async (_id, token) => {
+    const user = await User.findByIdAndUpdate(_id, { token });
+    return user;
+}
+
 const verifyUser = async (verifyToken) => {
     const user = await User.findOne({ verifyToken });
     return user;
 };
 
-module.exports = { createUser, getUserById, getUserByemail, getUserByToken, logout, verifyUser };
+module.exports = { createUser, getUserById, getUserByemail, getUserByToken, logout, updateToken, verifyUser };
