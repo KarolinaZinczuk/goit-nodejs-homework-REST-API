@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs").promises;
 const multer = require("multer");
 const jimp = require("jimp");
+const { v4 } = require("uuid");
 
 const loginHandler = require("../../auth//loginHandler");
 const auth = require("../../auth/auth");
@@ -31,7 +32,14 @@ router.post("/signup", async (req, res, next) => {
     }
 
     try {
-        const user = await createUser(email, password);
+        const verificationToken = v4();
+        const user = await createUser(email, password, verificationToken);
+        const data = {
+            to: email,
+            subject: "Verification email",
+            html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Click to confirm registration</a>`,
+        };
+        await sendEmail(data);
         return res.status(200).json(user);
     } catch (error) {
         return res.status(500).send({ message: "Something went wrong" });
@@ -122,13 +130,14 @@ router.patch("/avatars", auth, upload.single("avatar"), async (req, res, next) =
 router.get("/verify/:verificationToken", async (req, res) => {
     try {
         const { verificationToken } = req.params;
-        const user = await verifyUser(verificationToken);
+        const user = await verifyUser({ verificationToken });
 
-        if (user) {
-            return res.send({ message: "Verification succesfull" });
-        } else {
+        if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
+        await User.findByIdAndUpdate(_id, { verificationToken: "", verify: true, });
+        return res.send({ message: "Verification succesfull" });
+
     } catch (error) {
         return res.status(500).send({ message: "Server error" });
     }
