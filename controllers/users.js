@@ -32,10 +32,15 @@ const getUserByToken = async (token) => {
     return user;
 };
 
+const updateToken = async (_id, token) => {
+    const user = await User.findByIdAndUpdate(_id, { token });
+    return user;
+}
+
 const logout = async (req, res) => {
     const { _id } = req.user;
     await User.findByIdAndUpdate(_id, { token: "" });
     res.status(204).send();
 };
 
-module.exports = { createUser, getUserById, getUserByemail, getUserByToken, logout };
+module.exports = { createUser, getUserById, getUserByemail, getUserByToken, updateToken, logout };
